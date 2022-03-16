@@ -11,7 +11,7 @@ productRoutes.get("/:productId", productsServices.getProduct);
 
 productRoutes.post(
   "/",
-  // productsRules.postProductRules(body),
+  productsRules.postProductRules(body),
   productsServices.postProduct
 );
 
