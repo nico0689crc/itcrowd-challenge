@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const globalConfig = {
-  port: process.env.RUNNING_PORT,
+  port: process.env.PORT,
 };
 
 module.exports = globalConfig;
