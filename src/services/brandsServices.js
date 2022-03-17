@@ -1,29 +1,40 @@
-const { validationResult } = require("express-validator");
+const {
+  TryCatchHelper,
+  ExpressValidatorResult,
+  ResponsesTypes,
+} = require("../shared");
+const { Brand } = require("../models");
 
 const getBrands = async (req, res, next) => {
-  res.send("Get Brands All.");
-};
+  TryCatchHelper(async () => {
+    const brands = await Brand.findAllCustom();
 
-const getBrand = async (req, res, next) => {
-  res.send("Get Brand By Id.");
+    return res
+      .status(
+        ResponsesTypes.success.success_200.success_resource_get_success
+          .httpStatusCode
+      )
+      .json({ data: brands });
+  }, next);
 };
 
 const postBrand = async (req, res, next) => {
-  res.send("Post Brands.");
-};
+  TryCatchHelper(async () => {
+    await ExpressValidatorResult(req);
+    const attributes = req.body;
 
-const patchBrand = async (req, res, next) => {
-  res.send("Patch Brands.");
-};
+    const brand = await Brand.createCustom(attributes);
 
-const deleteBrand = async (req, res, next) => {
-  res.send("Delete Brands.");
+    return res
+      .status(
+        ResponsesTypes.success.success_200.success_resource_created_success
+          .httpStatusCode
+      )
+      .json({ data: brand });
+  }, next);
 };
 
 module.exports = {
   getBrands,
-  getBrand,
   postBrand,
-  patchBrand,
-  deleteBrand,
 };

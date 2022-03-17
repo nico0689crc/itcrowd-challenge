@@ -17,7 +17,7 @@ const throwErrorNotFoundResource = resourceId => {
   );
 };
 
-const Product = sequelize.define("product", {
+const Product = sequelize.define("products", {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -27,7 +27,6 @@ const Product = sequelize.define("product", {
   name: { type: Sequelize.STRING, allowNull: false },
   description: { type: Sequelize.TEXT, allowNull: false },
   image_url: { type: Sequelize.STRING, allowNull: false },
-  brand_id: { type: Sequelize.INTEGER, allowNull: false },
   price: { type: Sequelize.DOUBLE, allowNull: false },
 });
 
@@ -46,7 +45,7 @@ Product.findByPkCustom = async productId => {
 };
 
 Product.createCustom = async attribute => {
-  return await Product.create(attribute);
+  return await Product.create({ ...attribute, brandId: attribute.brand_id });
 };
 
 Product.patchCustom = async (productId, attribute) => {
