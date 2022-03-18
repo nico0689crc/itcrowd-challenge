@@ -67,8 +67,8 @@ const brandsSeed = [
 
 seedDbRoutes.get("/", async (req, res, next) => {
   try {
-    await Product.destroy({ truncate: true, restartIdentity: true });
     await Brand.destroy({ truncate: true, restartIdentity: true });
+    await Product.destroy({ truncate: true, restartIdentity: true });
     await User.destroy();
 
     usersSeed.map(async user => {
