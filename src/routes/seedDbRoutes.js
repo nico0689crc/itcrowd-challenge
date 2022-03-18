@@ -18,23 +18,23 @@ seedDbRoutes.get("/", async (req, res, next) => {
       await User.registerUser(user);
     });
 
-    const brandsCreatedId = [];
-    brandsSeed.map(async brand => {
-      const brandCreated = await Brand.createCustom(brand);
-      brandsCreatedId.push(brandCreated.id);
-    });
+    const brandsCreatedId = (await Brand.bulkCreate(brandsSeed)).map(
+      brand => brand.id
+    );
 
-    productsSeed.map(async product => {
-      const randomIndex = Math.random() * (brandsCreatedId.length - 1);
+    const productsParsed = productsSeed.map(product => {
+      const randomIndex = Math.floor(Math.random() * brandsCreatedId.length);
 
-      await Product.createCustom({
+      return {
         name: product.name,
         price: product.price,
         description: product.description,
         image_url: product.images[0].original,
-        brand_id: brandsCreatedId[randomIndex],
-      });
+        brandId: brandsCreatedId[randomIndex],
+      };
     });
+
+    await Product.bulkCreate(productsParsed);
 
     return res.send("Database populated.");
   } catch (error) {
