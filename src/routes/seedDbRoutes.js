@@ -1,6 +1,7 @@
 const express = require("express");
 const seedDbRoutes = express.Router();
 const { User, Brand, Product } = require("../models");
+const { databaseConfig } = require("../config");
 
 const productsSeed = require("../utils/products.json");
 
@@ -67,9 +68,10 @@ const brandsSeed = [
 
 seedDbRoutes.get("/", async (req, res, next) => {
   try {
-    await Brand.destroy({ truncate: true, restartIdentity: true });
-    await Product.destroy({ truncate: true, restartIdentity: true });
-    await User.destroy();
+    Product.belongsTo(Brand, { constraints: true, onDelete: "RESTRICT" });
+    Brand.hasMany(Product);
+
+    await databaseConfig.sync({ force: true });
 
     usersSeed.map(async user => {
       await User.registerUser(user);
@@ -91,7 +93,7 @@ seedDbRoutes.get("/", async (req, res, next) => {
 
     return res.send("Database populated.");
   } catch (error) {
-    return res.send(error);
+    return res.send("Database error");
   }
 });
 
