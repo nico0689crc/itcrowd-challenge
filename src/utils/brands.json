@@ -1,0 +1,34 @@
+[
+  {
+    "name": "Adidas",
+    "logo_url": "https://itcrowd-challenge-backend.herokuapp.com/uploads/images/brands/adidas_logo.jpeg"
+  },
+  {
+    "name": "Barilla",
+    "logo_url": "https://itcrowd-challenge-backend.herokuapp.com/uploads/images/brands/barilla_logo.png"
+  },
+  {
+    "name": "Coca Cola",
+    "logo_url": "https://itcrowd-challenge-backend.herokuapp.com/uploads/images/brands/coca_cola_logo.png"
+  },
+  {
+    "name": "Ford",
+    "logo_url": "https://itcrowd-challenge-backend.herokuapp.com/uploads/images/brands/ford_logo.png"
+  },
+  {
+    "name": "Marolio",
+    "logo_url": "https://itcrowd-challenge-backend.herokuapp.com/uploads/images/brands/marolio_logo.png"
+  },
+  {
+    "name": "Matarazo",
+    "logo_url": "https://itcrowd-challenge-backend.herokuapp.com/uploads/images/brands/matarazo_logo.png"
+  },
+  {
+    "name": "Pringles",
+    "logo_url": "https://itcrowd-challenge-backend.herokuapp.com/uploads/images/brands/pringles_logo.jpeg"
+  },
+  {
+    "name": "Starbucks",
+    "logo_url": "https://itcrowd-challenge-backend.herokuapp.com/uploads/images/brands/starbucks_logo.png"
+  }
+]

@@ -4,67 +4,8 @@ const { User, Brand, Product } = require("../models");
 const { databaseConfig } = require("../config");
 
 const productsSeed = require("../utils/products.json");
-
-const usersSeed = [
-  {
-    email: "user_1@user.com",
-    password: "user123!@",
-    username: "Usuario 1",
-  },
-  {
-    email: "user_2@user.com",
-    password: "user123!@",
-    username: "Usuario 2",
-  },
-  {
-    email: "user_3@user.com",
-    password: "user123!@",
-    username: "Usuario 3",
-  },
-];
-
-const brandsSeed = [
-  {
-    name: "Adidas",
-    logo_url:
-      "https://itcrowd-challenge-backend.herokuapp.com/uploads/images/brands/adidas_logo.jpeg",
-  },
-  {
-    name: "Barilla",
-    logo_url:
-      "https://itcrowd-challenge-backend.herokuapp.com/uploads/images/brands/barilla_logo.png",
-  },
-  {
-    name: "Coca Cola",
-    logo_url:
-      "https://itcrowd-challenge-backend.herokuapp.com/uploads/images/brands/coca_cola_logo.png",
-  },
-  {
-    name: "Ford",
-    logo_url:
-      "https://itcrowd-challenge-backend.herokuapp.com/uploads/images/brands/ford_logo.png",
-  },
-  {
-    name: "Marolio",
-    logo_url:
-      "https://itcrowd-challenge-backend.herokuapp.com/uploads/images/brands/marolio_logo.png",
-  },
-  {
-    name: "Matarazo",
-    logo_url:
-      "https://itcrowd-challenge-backend.herokuapp.com/uploads/images/brands/matarazo_logo.png",
-  },
-  {
-    name: "Pringles",
-    logo_url:
-      "https://itcrowd-challenge-backend.herokuapp.com/uploads/images/brands/pringles_logo.jpeg",
-  },
-  {
-    name: "Starbucks",
-    logo_url:
-      "https://itcrowd-challenge-backend.herokuapp.com/uploads/images/brands/starbucks_logo.png",
-  },
-];
+const usersSeed = require("../utils/users.json");
+const brandsSeed = require("../utils/brands.json");
 
 seedDbRoutes.get("/", async (req, res, next) => {
   try {
@@ -77,17 +18,21 @@ seedDbRoutes.get("/", async (req, res, next) => {
       await User.registerUser(user);
     });
 
+    const brandsCreatedId = [];
     brandsSeed.map(async brand => {
-      await Brand.createCustom(brand);
+      const brandCreated = await Brand.createCustom(brand);
+      brandsCreatedId.push(brandCreated.id);
     });
 
     productsSeed.map(async product => {
+      const randomIndex = Math.random() * (brandsCreatedId.length - 1);
+
       await Product.createCustom({
         name: product.name,
         price: product.price,
         description: product.description,
         image_url: product.images[0].original,
-        brand_id: Math.random() * (8 - 1) + 1,
+        brand_id: brandsCreatedId[randomIndex],
       });
     });
 
