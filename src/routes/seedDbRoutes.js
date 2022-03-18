@@ -7,6 +7,8 @@ const productsSeed = require("../utils/products.json");
 const usersSeed = require("../utils/users.json");
 const brandsSeed = require("../utils/brands.json");
 
+let brandsCreatedId;
+
 seedDbRoutes.get("/", async (req, res, next) => {
   try {
     Product.belongsTo(Brand, { constraints: true, onDelete: "RESTRICT" });
@@ -18,7 +20,7 @@ seedDbRoutes.get("/", async (req, res, next) => {
       await User.registerUser(user);
     });
 
-    const brandsCreatedId = (await Brand.bulkCreate(brandsSeed)).map(
+    brandsCreatedId = (await Brand.bulkCreate(brandsSeed)).map(
       brand => brand.id
     );
 
@@ -38,7 +40,7 @@ seedDbRoutes.get("/", async (req, res, next) => {
 
     return res.send("Database populated.");
   } catch (error) {
-    return res.send("Database error: " + JSON.stringify(error));
+    return res.send("Database error: " + JSON.stringify(brandsCreatedId));
   }
 });
 
