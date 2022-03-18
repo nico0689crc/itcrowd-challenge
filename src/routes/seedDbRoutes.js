@@ -20,9 +20,7 @@ seedDbRoutes.get("/", async (req, res, next) => {
       await User.registerUser(user);
     });
 
-    brandsCreatedId = (await Brand.bulkCreate(brandsSeed)).map(
-      brand => brand.id
-    );
+    brandsCreatedId = (await Brand.bulkCreate(brandsSeed)).map(brand => brand);
 
     const productsParsed = productsSeed.map(product => {
       const randomIndex = Math.floor(Math.random() * brandsCreatedId.length);
