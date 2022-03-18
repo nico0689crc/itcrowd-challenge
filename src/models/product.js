@@ -1,6 +1,8 @@
 const { ErrorResponseParser, ResponsesTypes } = require("../shared");
 const { Sequelize } = require("sequelize");
 const sequelize = require("../config/database");
+const { globalConfig } = require("../config");
+const Brand = require("./brand");
 
 const throwErrorNotFoundResource = resourceId => {
   const errorObject = {
@@ -17,6 +19,41 @@ const throwErrorNotFoundResource = resourceId => {
   );
 };
 
+const getPaginationLinks = (totalItems, page) => {
+  const links = {};
+  const apiUrl = `${globalConfig.api_url}/products?`;
+  const totalPages = Math.ceil(totalItems / +page.size);
+  const currentPage = +page.number;
+
+  if (currentPage < 1) {
+    currentPage = 1;
+  } else if (currentPage > totalPages && totalPages > 0) {
+    currentPage = totalPages;
+  }
+
+  const firstPage = 1;
+  const prevPage = currentPage - 1;
+  const nextPage = currentPage + 1;
+
+  if (currentPage === 2 && totalPages !== 0) {
+    links.prev = `${apiUrl}page%5Bnumber%5D=${prevPage}&page%5Bsize%5D=${page.size}`;
+  } else if (currentPage >= 3 && totalPages !== 0) {
+    links.first = `${apiUrl}page%5Bnumber%5D=${firstPage}&page%5Bsize%5D=${page.size}`;
+    links.prev = `${apiUrl}page%5Bnumber%5D=${prevPage}&page%5Bsize%5D=${page.size}`;
+  }
+
+  links.self = `${apiUrl}page%5Bnumber%5D=${currentPage}&page%5Bsize%5D=${page.size}`;
+
+  if (currentPage <= totalPages - 2) {
+    links.next = `${apiUrl}page%5Bnumber%5D=${nextPage}&page%5Bsize%5D=${page.size}`;
+    links.last = `${apiUrl}page%5Bnumber%5D=${totalPages}&page%5Bsize%5D=${page.size}`;
+  } else if (currentPage <= totalPages - 1) {
+    links.next = `${apiUrl}page%5Bnumber%5D=${nextPage}&page%5Bsize%5D=${page.size}`;
+  }
+
+  return links;
+};
+
 const Product = sequelize.define("products", {
   id: {
     type: Sequelize.INTEGER,
@@ -30,12 +67,31 @@ const Product = sequelize.define("products", {
   price: { type: Sequelize.DOUBLE, allowNull: false },
 });
 
-Product.findAllCustom = async () => {
-  return await Product.findAll();
+Product.findAllCustom = async (page = { number: 1, size: 10 }) => {
+  const limit = +page.size;
+  const offset = (page.number - 1) * page.size;
+
+  const totalItems = await Product.count();
+
+  const products = await Product.findAll({
+    limit: limit,
+    offset: offset,
+    include: Brand,
+  });
+
+  const result = {
+    api: {
+      totalItems: totalItems,
+    },
+    links: getPaginationLinks(totalItems, page),
+    data: products,
+  };
+
+  return result;
 };
 
 Product.findByPkCustom = async productId => {
-  const product = await Product.findByPk(productId);
+  const product = await Product.findByPk(productId, { include: Brand });
 
   if (!product) {
     throwErrorNotFoundResource(productId);

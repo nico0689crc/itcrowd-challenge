@@ -7,14 +7,15 @@ const { Product } = require("../models");
 
 const getProducts = async (req, res, next) => {
   TryCatchHelper(async () => {
-    const products = await Product.findAllCustom();
+    const { page } = req.query;
+    const productsResult = await Product.findAllCustom(page);
 
     return res
       .status(
         ResponsesTypes.success.success_200.success_resource_get_success
           .httpStatusCode
       )
-      .json({ data: products });
+      .json(productsResult);
   }, next);
 };
 
