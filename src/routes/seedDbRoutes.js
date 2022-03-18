@@ -38,7 +38,7 @@ seedDbRoutes.get("/", async (req, res, next) => {
 
     return res.send("Database populated.");
   } catch (error) {
-    return res.send("Database error");
+    return res.send("Database error: " + JSON.stringify(error));
   }
 });
 
