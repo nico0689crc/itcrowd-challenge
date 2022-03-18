@@ -66,29 +66,33 @@ const brandsSeed = [
 ];
 
 seedDbRoutes.get("/", async (req, res, next) => {
-  await Product.destroy({ truncate: true, restartIdentity: true });
-  await Brand.destroy({ truncate: { cascade: true }, restartIdentity: true });
-  await User.destroy({ truncate: { cascade: true } });
+  try {
+    await Product.destroy({ truncate: true, restartIdentity: true });
+    await Brand.destroy({ truncate: { cascade: true }, restartIdentity: true });
+    await User.destroy({ truncate: { cascade: true } });
 
-  usersSeed.map(async user => {
-    await User.registerUser(user);
-  });
-
-  brandsSeed.map(async brand => {
-    await Brand.createCustom(brand);
-  });
-
-  productsSeed.map(async product => {
-    await Product.createCustom({
-      name: product.name,
-      price: product.price,
-      description: product.description,
-      image_url: product.images[0].original,
-      brand_id: Math.random() * (8 - 1) + 1,
+    usersSeed.map(async user => {
+      await User.registerUser(user);
     });
-  });
 
-  return res.send("Database populated.");
+    brandsSeed.map(async brand => {
+      await Brand.createCustom(brand);
+    });
+
+    productsSeed.map(async product => {
+      await Product.createCustom({
+        name: product.name,
+        price: product.price,
+        description: product.description,
+        image_url: product.images[0].original,
+        brand_id: Math.random() * (8 - 1) + 1,
+      });
+    });
+
+    return res.send("Database populated.");
+  } catch (error) {
+    res.send(error.messsage);
+  }
 });
 
 module.exports = seedDbRoutes;
