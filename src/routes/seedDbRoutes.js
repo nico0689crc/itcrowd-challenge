@@ -91,7 +91,7 @@ seedDbRoutes.get("/", async (req, res, next) => {
 
     return res.send("Database populated.");
   } catch (error) {
-    res.send(error.messsage);
+    return res.send(error.messsage);
   }
 });
 
