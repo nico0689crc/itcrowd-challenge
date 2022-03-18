@@ -7,7 +7,7 @@ const productsSeed = require("../utils/products.json");
 const usersSeed = require("../utils/users.json");
 const brandsSeed = require("../utils/brands.json");
 
-let brandsCreatedId;
+const brandsCreatedId = [];
 
 seedDbRoutes.get("/", async (req, res, next) => {
   try {
@@ -22,7 +22,10 @@ seedDbRoutes.get("/", async (req, res, next) => {
 
     await Brand.bulkCreate(brandsSeed);
 
-    brandsCreatedId = await Brand.findAll().map(brand => brand);
+    const brands = await Brand.findAll();
+    for (const brand of brands) {
+      brandsCreatedId.push(brand.id);
+    }
 
     const productsParsed = productsSeed.map(product => {
       const randomIndex = Math.floor(Math.random() * brandsCreatedId.length);
