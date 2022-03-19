@@ -4,6 +4,10 @@
 
 ITCrowd Challenge API - Backend is a challenge project.
 
+# API Endpoints Reference
+
+https://documenter.getpostman.com/view/10860705/UVsPPjyC
+
 # Demo Links
 
 All Products Endpoint: GET https://itcrowd-challenge-backend.herokuapp.com/api/products
