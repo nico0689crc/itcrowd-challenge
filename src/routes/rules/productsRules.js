@@ -1,10 +1,8 @@
 const postProductRules = body => {
   return [
     body("name")
-      .isLength({ min: 10 })
-      .withMessage(
-        () => "El nombre del producto debe tener al menos 10 caracteres."
-      ),
+      .isLength({ min: 1 })
+      .withMessage(() => "El nombre del producto no debe estar en blanco."),
     body("description")
       .isLength({ min: 30 })
       .withMessage(
@@ -29,10 +27,8 @@ const postProductRules = body => {
 const patchProductRules = body => {
   return [
     body("name")
-      .isLength({ min: 10 })
-      .withMessage(
-        () => "El nombre del producto debe tener al menos 10 caracteres."
-      ),
+      .isLength({ min: 1 })
+      .withMessage(() => "El nombre del producto no debe estar en blanco."),
     body("description")
       .isLength({ min: 30 })
       .withMessage(

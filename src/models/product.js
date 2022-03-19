@@ -115,7 +115,7 @@ Product.patchCustom = async (productId, attribute) => {
   product.name = name;
   product.description = description;
   product.image_url = image_url;
-  product.brand_id = brand_id;
+  product.brandId = brand_id;
   product.price = price;
 
   await product.save();

@@ -93,8 +93,6 @@ const checkUserAuthorization = () => {
       return;
     }
 
-    console.log(tokenDecodedPayload);
-
     const user = await User.findByPk(tokenDecodedPayload.email);
 
     if (!user) {
