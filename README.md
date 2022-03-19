@@ -51,6 +51,6 @@ API_URL=[URL where this API is runnig - For example: https://itcrowd-challenge-b
 
 <br>
 
-### `npm start`
+-- Runs the app in the development mode: `npm install`
 
-Runs the app in the development mode.
+### `npm start`
