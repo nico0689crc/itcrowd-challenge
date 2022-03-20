@@ -76,6 +76,8 @@ Product.findAllCustom = async (page = { number: 1, size: 10 }) => {
   const products = await Product.findAll({
     limit: limit,
     offset: offset,
+
+    order: [["id", "DESC"]],
     include: Brand,
   });
 
